@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Ninject" Version="3.3.6" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\laba1s3core\laba1s3core.csproj" />
+    <ProjectReference Include="..\CompositionRoot\CompositionRoot.csproj" />
+  </ItemGroup>
+</Project>

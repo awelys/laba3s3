@@ -38,14 +38,82 @@ class Program
             Console.WriteLine();
             switch (k)
             {
-                case "1": foreach (var b in logic.ReadAllBooks()) Console.WriteLine(b); break;
-                case "2": var newBook = ReadBookFromConsole(); logic.CreateBook(newBook); Console.WriteLine("Книга добавлена: " + newBook.Id); break;
-                case "3": Console.Write("Введите Id книги для удаления: "); if (int.TryParse(Console.ReadLine(), out var delId)) { var ok = logic.DeleteBook(delId); Console.WriteLine(ok ? "Удалено" : "Книга не найдена"); } else Console.WriteLine("Неверный формат Id"); break;
-                case "4": Console.Write("Введите Id книги для изменения: "); if (int.TryParse(Console.ReadLine(), out var upId)) { var exist = logic.ReadBook(upId); if (exist == null) { Console.WriteLine("Книга не найдена"); break; } Console.WriteLine("Текущие данные: " + exist); var updated = ReadBookFromConsole(); updated.Id = exist.Id; var res = logic.UpdateBook(updated); Console.WriteLine(res ? "Обновлено" : "Ошибка при обновлении"); } else Console.WriteLine("Неверный формат Id"); break;
-                case "5": Console.Write("Введите часть имени автора: "); var part = Console.ReadLine() ?? string.Empty; var found = logic.FindBooksByAuthor(part).ToList(); if (!found.Any()) Console.WriteLine("Ничего не найдено"); else found.ForEach(b => Console.WriteLine(b)); break;
-                case "6": Console.Write("Введите часть названия жанра: "); var genre = Console.ReadLine() ?? string.Empty; var byGenre = logic.FindBooksByGenre(genre).ToList(); if (!byGenre.Any()) Console.WriteLine("Ничего не найдено"); else byGenre.ForEach(b => Console.WriteLine(b)); break;
-                case "0": return;
-                default: Console.WriteLine("Неизвестная команда"); break;
+                case "1":
+                    foreach (var b in logic.ReadAllBooks())
+                        Console.WriteLine(b);
+                    break;
+
+                case "2":
+                    var newBook = ReadBookFromConsole();
+                    logic.CreateBook(newBook);
+                    Console.WriteLine("Книга добавлена: " + newBook.Id);
+                    break;
+
+                case "3":
+                    Console.Write("Введите Id книги для удаления: ");
+                    if (int.TryParse(Console.ReadLine(), out var delId))
+                    {
+                        var ok = logic.DeleteBook(delId);
+                        Console.WriteLine(ok ? "Удалено" : "Книга не найдена");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Неверный формат Id");
+                    }
+                    break;
+
+                case "4":
+                    Console.Write("Введите Id книги для изменения: ");
+                    if (int.TryParse(Console.ReadLine(), out var upId))
+                    {
+                        var exist = logic.ReadBook(upId);
+                        if (exist == null)
+                        {
+                            Console.WriteLine("Книга не найдена");
+                            break;
+                        }
+
+                        Console.WriteLine("Текущие данные: " + exist);
+                        var updated = ReadBookFromConsole();
+                        updated.Id = exist.Id;
+
+                        var res = logic.UpdateBook(updated);
+                        Console.WriteLine(res ? "Обновлено" : "Ошибка при обновлении");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Неверный формат Id");
+                    }
+                    break;
+
+                case "5":
+                    Console.Write("Введите часть имени автора: ");
+                    var part = Console.ReadLine() ?? string.Empty;
+
+                    var found = logic.FindBooksByAuthor(part).ToList();
+                    if (!found.Any())
+                        Console.WriteLine("Ничего не найдено");
+                    else
+                        found.ForEach(b => Console.WriteLine(b));
+                    break;
+
+                case "6":
+                    Console.Write("Введите часть названия жанра: ");
+                    var genre = Console.ReadLine() ?? string.Empty;
+
+                    var byGenre = logic.FindBooksByGenre(genre).ToList();
+                    if (!byGenre.Any())
+                        Console.WriteLine("Ничего не найдено");
+                    else
+                        byGenre.ForEach(b => Console.WriteLine(b));
+                    break;
+
+                case "0":
+                    return;
+
+                default:
+                    Console.WriteLine("Неизвестная команда");
+                    break;
             }
         }
     }

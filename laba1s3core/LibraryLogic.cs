@@ -3,7 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 namespace laba1s3core
 {
-    public class LibraryLogic
+    public interface ILibraryLogic
+    {
+        void CreateBook(Book book);
+        bool DeleteBook(int id);
+        Book? ReadBook(int id);
+        IEnumerable<Book> ReadAllBooks();
+        bool UpdateBook(Book book);
+        IEnumerable<Book> FindBooksByAuthor(string authorPart);
+        IEnumerable<Book> FindBooksByGenre(string genrePart);
+    }
+    public interface IBussinessLogic
+    {
+        IEnumerable<Book> FindBooksByAuthor(string authorPart);
+        IEnumerable<Book> FindBooksByGenre(string genrePart);
+    }
+    public class BussinessLogic
+    {
+
+    }
+
+    public class LibraryLogic : ILibraryLogic
     {
         private readonly IRepository<Book> _repo;
         //public LibraryLogic(IRepository<Book> repo) => _repo = repo ?? throw new ArgumentNullException(nameof(repo));

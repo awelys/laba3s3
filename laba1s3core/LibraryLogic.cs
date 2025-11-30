@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 namespace laba1s3core
 {
     public interface ILibraryLogic
@@ -13,40 +14,53 @@ namespace laba1s3core
         IEnumerable<Book> FindBooksByAuthor(string authorPart);
         IEnumerable<Book> FindBooksByGenre(string genrePart);
     }
-    public interface IBussinessLogic
-    {
-        IEnumerable<Book> FindBooksByAuthor(string authorPart);
-        IEnumerable<Book> FindBooksByGenre(string genrePart);
-    }
-    public class BussinessLogic
-    {
-
-    }
 
     public class LibraryLogic : ILibraryLogic
     {
-        private readonly IRepository<Book> _repo;
-        //public LibraryLogic(IRepository<Book> repo) => _repo = repo ?? throw new ArgumentNullException(nameof(repo));
-        public LibraryLogic(IRepository<Book> repo)
+        private readonly IRepository<Book> _repository;
+        private readonly IBookBusinessLogic _business;
+
+        public LibraryLogic(IRepository<Book> repository, IBookBusinessLogic business)
         {
-            _repo = repo;
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _business = business ?? throw new ArgumentNullException(nameof(business));
         }
-        public void CreateBook(Book book) => _repo.Add(book);
-        public bool DeleteBook(int id) => _repo.Remove(id);
-        public Book? ReadBook(int id) => _repo.Get(id);
-        public IEnumerable<Book> ReadAllBooks() => _repo.GetAll();
-        public bool UpdateBook(Book book) => _repo.Update(book);
+
+        public void CreateBook(Book book)
+        {
+            _business.ValidateBook(book);
+            _repository.Add(book);
+        }
+
+        public bool DeleteBook(int id)
+        {
+            return _repository.Remove(id);
+        }
+
+        public Book? ReadBook(int id)
+        {
+            return _repository.Get(id);
+        }
+
+        public IEnumerable<Book> ReadAllBooks()
+        {
+            return _repository.GetAll();
+        }
+
+        public bool UpdateBook(Book book)
+        {
+            _business.ValidateBook(book);
+            return _repository.Update(book);
+        }
+
         public IEnumerable<Book> FindBooksByAuthor(string authorPart)
         {
-            if (string.IsNullOrWhiteSpace(authorPart)) return Enumerable.Empty<Book>();
-            var q = authorPart.Trim().ToLowerInvariant();
-            return _repo.GetAll().Where(b => b.Author.ToLowerInvariant().Contains(q));
+            return _business.FindByAuthor(authorPart);
         }
+
         public IEnumerable<Book> FindBooksByGenre(string genrePart)
         {
-            if (string.IsNullOrWhiteSpace(genrePart)) return Enumerable.Empty<Book>();
-            var q = genrePart.Trim().ToLowerInvariant();
-            return _repo.GetAll().Where(b => b.Genre.ToLowerInvariant().Contains(q));
+            return _business.FindByGenre(genrePart);
         }
     }
 }

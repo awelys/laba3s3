@@ -1,6 +1,8 @@
 using CompositionRoot;
 using laba1s3core;
 using Ninject;
+using Ninject.Modules;
+using Ninject.Syntax;
 using System;
 using System.Windows.Forms;
 namespace laba1s3winforms
@@ -12,20 +14,14 @@ namespace laba1s3winforms
         {
             AppDomain.CurrentDomain.SetData("DataDirectory", AppDomain.CurrentDomain.BaseDirectory);
             ApplicationConfiguration.Initialize();
-            //var logic = RepositoryFactory.CreateLibraryLogic(useEf: true);
+            bool useDapper = true; // EF - false
 
-
-            /// <summary>
-            /// EF
-            /// </summary>
-            //var kernel = new StandardKernel(new SimpleConfigModule());
-
-            /// <summary>
-            /// Dapper
-            /// </summary>
-            var kernel = new StandardKernel(new SimpleConfigModule()).Get<IRepository<Book>>("dapper");
-            var logic = new LibraryLogic(kernel);
+            IKernel kernel = useDapper
+                ? new StandardKernel(new DapperModule())
+                : new StandardKernel(new EfModule());
+            var logic = kernel.Get<ILibraryLogic>();
             Application.Run(new Form1(logic));
+
         }
     }
 }

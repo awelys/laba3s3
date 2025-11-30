@@ -4,7 +4,7 @@ using System.IO;
 using laba1s3core;
 namespace DataAccessLayer
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext, IAppDbContext
     {
         public DbSet<Book> Books { get; set; } = null!;
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
